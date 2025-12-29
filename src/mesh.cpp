@@ -7,12 +7,15 @@ Mesh::Mesh() {
     glGenVertexArrays(1, &VertexArrayID);
     glBindVertexArray(VertexArrayID);
 
+    GLfloat phi = (1 + 2.2361) / 4;
+    GLfloat sqrt2 = 1.414;
+
     // Tetrahedron
     // GLfloat vertices[] = {
-    //     0.0f,  0.0f,  0.577f,
-    //     0.0f,  0.816f, -0.289f,
-    //    -0.707f, -0.408f, -0.289f,
-    //     0.707f, -0.408f, -0.289f
+    //     0.5f, 0.0f, -0.5f/sqrt2,
+    //     -0.5f, 0.0f, -0.5f/sqrt2,
+    //     0.0f, 0.5f, 0.5f/sqrt2,
+    //     -0.0f, -0.5f, 0.5f/sqrt2,
     // };
     // GLint triangles[] = {
     //     0, 1, 2,
@@ -60,46 +63,115 @@ Mesh::Mesh() {
     // };
 
     // Icosahedron
-    GLfloat phi = (1 + 2.2361) / 4;
-    GLfloat vertices[] = {
-        0.0f,  0.5f, phi,
-        0.0f,  0.5f, -phi,
-        0.0f,  -0.5f, phi,
-        0.0f,  -0.5f, -phi,
-        0.5f, phi, 0,
-        0.5f, -phi, 0,
-        -0.5f, phi, 0,
-        -0.5f, -phi, 0,
-        phi, 0, 0.5,
-        -phi, 0, 0.5,
-        phi, 0, -0.5,
-        -phi, 0, -0.5,
-    };
-    GLint triangles[] = {
-        // top
-        4, 0, 8,
-        0, 2, 8,
-        2, 5, 8,
-        5, 10, 8,
-        10, 4, 8,
-        // bottom
-        3, 7, 11,
-        7, 9, 11,
-        9, 6, 11,
-        6, 1, 11,
-        1, 3, 11,
-        // belt
-        3, 7, 5,
-        7, 9, 2,
-        9, 6, 0,
-        6, 1, 4,
-        1, 3, 10
-        // (other five faces of the belt are not added)
-    };
+    // GLfloat vertices[] = {
+    //     0.0f,  0.5f, phi,
+    //     0.0f,  0.5f, -phi,
+    //     0.0f,  -0.5f, phi,
+    //     0.0f,  -0.5f, -phi,
+    //     0.5f, phi, 0,
+    //     0.5f, -phi, 0,
+    //     -0.5f, phi, 0,
+    //     -0.5f, -phi, 0,
+    //     phi, 0, 0.5f,
+    //     -phi, 0, 0.5f,
+    //     phi, 0, -0.5f,
+    //     -phi, 0, -0.5f
+    // };
+    // GLint triangles[] = {
+    //     // top
+    //     4, 0, 8,
+    //     0, 2, 8,
+    //     2, 5, 8,
+    //     5, 10, 8,
+    //     10, 4, 8,
+    //     // bottom
+    //     3, 7, 11,
+    //     7, 9, 11,
+    //     9, 6, 11,
+    //     6, 1, 11,
+    //     1, 3, 11,
+    //     // belt
+    //     3, 7, 5,
+    //     7, 9, 2,
+    //     9, 6, 0,
+    //     6, 1, 4,
+    //     1, 3, 10
+    //     // (other five faces of the belt are not added)
+    // };
     
-
     // Dodecahedron
-    // (todo)
+    GLfloat vertices[] = {
+        0.5f, 0.5f, 0.5f,
+        0.5f, -0.5f, 0.5f,
+        0.5f, 0.5f, -0.5f,
+        0.5f, -0.5f, -0.5f,
+        -0.5f, 0.5f, 0.5f,
+        -0.5f, -0.5f, 0.5f,
+        -0.5f, 0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,
+        0.25f/phi, 0.0f, phi,
+        0.25f/phi, 0.0f, -phi,
+        -0.25f/phi, 0.0f, phi,
+        -0.25f/phi, 0.0f, -phi,
+        0.0f, phi, 0.25f/phi,
+        0.0f, -phi, 0.25f/phi,
+        0.0f, phi, -0.25f/phi,
+        0.0f, -phi, -0.25f/phi,
+        phi, 0.25f/phi, 0,
+        -phi, 0.25f/phi, 0,
+        phi, -0.25f/phi, 0,
+        -phi, -0.25f/phi, 0
+    };
+    // each face receives three triangles
+    GLuint triangles[] = {
+        0, 16, 18,
+        1, 16, 18,
+        0, 1, 8,
+        
+        2, 16, 18,
+        3, 16, 18,
+        2, 3, 9,
+
+        4, 17, 19,
+        5, 17, 19,
+        4, 5, 10,
+
+        6, 17, 19,
+        7, 17, 19,
+        6, 7, 11,
+
+        8, 10, 1,
+        8, 10, 5,
+        1, 5, 13,
+
+        8, 10, 0,
+        8, 10, 4,
+        0, 4, 12,
+
+        9, 11, 2,
+        9, 11, 6,
+        2, 6, 14,
+
+        9, 11, 3,
+        9, 11, 7,
+        3, 7, 15,
+
+        12, 14, 0,
+        12, 14, 2,
+        0, 2, 16,
+
+        12, 14, 4,
+        12, 14, 6,
+        4, 6, 17,
+
+        13, 15, 1,
+        13, 15, 3,
+        1, 3, 18,
+
+        13, 15, 5,
+        13, 15, 7,
+        5, 7, 19
+    };
 
     glGenBuffers(1, &vertexbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
