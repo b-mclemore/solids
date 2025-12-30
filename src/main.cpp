@@ -4,6 +4,10 @@
 #include <mesh.h>
 #include <loadShader.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 int main(int argc, char* argv[]) {
 	// Load window
 	// =========================
@@ -44,12 +48,21 @@ int main(int argc, char* argv[]) {
 	}
 
 	// Create solid
-	Mesh cube;
+	Mesh cube("../data/cube.txt");
     GLuint programID = LoadShaders("../shaders/vertex.glsl", "../shaders/fragment.glsl");
 
+    // Create view
+    glm::mat4 view = glm::mat4(1.0f);
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+    glm::mat4 projection;
+    projection = glm::perspective(glm::radians(60.0f), float(screen_width)/(float)screen_height, 0.1f, 100.0f);
+
 	bool done = false;
+    uint32_t last = SDL_GetTicks();
+    int solid_num = 1;
 
     while(!done) {
+        uint32_t current = SDL_GetTicks();
         glViewport(0, 0, screen_width, screen_height);
 
         SDL_Event event;
@@ -57,13 +70,33 @@ int main(int argc, char* argv[]) {
             if(event.type == SDL_QUIT) {
                 done = true;
             }
+            if(event.type == SDL_KEYDOWN) {
+                solid_num = (solid_num + 1) % 5;
+                switch(solid_num) {
+                    case 0: cube.loadSolid("../data/tetrahedron.txt"); break;
+                    case 1: cube.loadSolid("../data/cube.txt"); break;
+                    case 2: cube.loadSolid("../data/octahedron.txt"); break;
+                    case 3: cube.loadSolid("../data/dodecahedron.txt"); break;
+                    case 4: cube.loadSolid("../data/icosahedron.txt"); break;
+                }
+            }
         }
-        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+        float dT = (current - last) / 1000.0f;
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::rotate(model, glm::radians(50.0f)*dT, glm::vec3(0.5f, 1.0f, 0.0f));
+
+		int modelLoc = glGetUniformLocation(programID, "model");
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		int viewLoc = glGetUniformLocation(programID, "view");
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+		int projectionLoc = glGetUniformLocation(programID, "projection");
+		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
 		glUseProgram(programID);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-        cube.draw();    
+		cube.drawWireframe();	    
 
         SDL_GL_SwapWindow(window);
     }

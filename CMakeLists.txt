@@ -19,20 +19,23 @@ include_directories(${GLEW_INCLUDE_DIRS})
 
 find_package(OpenGL)
 
+find_package(glm CONFIG REQUIRED)
+
 # subdirectories
 # add_subdirectory( src/engine )
 
 # Executable and link
-add_executable(${PROJECT_NAME} 
+add_executable(${PROJECT_NAME}
     src/main.cpp
     src/mesh.cpp
-    src/loadShader.cpp)
+    src/loadShader.cpp
+    src/solid.cpp)
 target_include_directories(
         ${PROJECT_NAME}
         PRIVATE
         ${PROJECT_SOURCE_DIR}/include
 )
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${GLEW_LIBRARIES} OpenGL::GL)
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${GLEW_LIBRARIES} OpenGL::GL glm::glm)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
