@@ -1,0 +1,9 @@
+Pathological examples
+- Kepler's star polyhedron
+- Kepler's "great stellated dodecahedron"
+- The "picture-frame" (Lhuilier 1812-13a p. 185)
+- Cube with cubic hole
+
+Other examples
+- Archimedian solids and their duals
+- Various prisms, frustrums, etc

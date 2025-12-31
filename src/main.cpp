@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	// Create solid
-	Mesh cube("../data/cube.txt");
+	Mesh solid("../data/platonic/tetrahedron.txt");
     GLuint programID = LoadShaders("../shaders/vertex.glsl", "../shaders/fragment.glsl");
 
     // Create view
@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
 
 	bool done = false;
     uint32_t last = SDL_GetTicks();
-    int solid_num = 1;
+    int solid_num = 0;
 
     while(!done) {
         uint32_t current = SDL_GetTicks();
@@ -71,13 +71,17 @@ int main(int argc, char* argv[]) {
                 done = true;
             }
             if(event.type == SDL_KEYDOWN) {
-                solid_num = (solid_num + 1) % 5;
+                solid_num = (solid_num + 1) % 9;
                 switch(solid_num) {
-                    case 0: cube.loadSolid("../data/tetrahedron.txt"); break;
-                    case 1: cube.loadSolid("../data/cube.txt"); break;
-                    case 2: cube.loadSolid("../data/octahedron.txt"); break;
-                    case 3: cube.loadSolid("../data/dodecahedron.txt"); break;
-                    case 4: cube.loadSolid("../data/icosahedron.txt"); break;
+                    case 0: solid.loadSolid("../data/platonic/tetrahedron.txt"); break;
+                    case 1: solid.loadSolid("../data/platonic/cube.txt"); break;
+                    case 2: solid.loadSolid("../data/platonic/octahedron.txt"); break;
+                    case 3: solid.loadSolid("../data/platonic/dodecahedron.txt"); break;
+                    case 4: solid.loadSolid("../data/platonic/icosahedron.txt"); break;
+                    case 5: solid.loadSolid("../data/pathological/cubes_corner.txt"); break;
+                    case 6: solid.loadSolid("../data/pathological/tetrahedron_edge.txt"); break;
+                    case 7: solid.loadSolid("../data/pathological/hollow_cube.txt"); break;
+                    case 8: solid.loadSolid("../data/pathological/stacked_cube.txt"); break;
                 }
             }
         }
@@ -96,7 +100,7 @@ int main(int argc, char* argv[]) {
 
 		glUseProgram(programID);
 
-		cube.drawWireframe();	    
+		solid.drawWireframe();	    
 
         SDL_GL_SwapWindow(window);
     }
