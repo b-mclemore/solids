@@ -3,10 +3,17 @@
 #include <SDL.h>
 #include <mesh.h>
 #include <loadShader.h>
+#include <string>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+const size_t num_shapes = 9;
+std::string shapes[num_shapes] = {
+    "platonic/tetrahedron", "platonic/cube", "platonic/octahedron", "platonic/dodecahedron", "platonic/icosahedron", 
+    "pathological/cubes_corner", "pathological/hollow_cube", "pathological/tetrahedron_edge", "pathological/stacked_cube"
+};
 
 int main(int argc, char* argv[]) {
 	// Load window
@@ -71,18 +78,8 @@ int main(int argc, char* argv[]) {
                 done = true;
             }
             if(event.type == SDL_KEYDOWN) {
-                solid_num = (solid_num + 1) % 9;
-                switch(solid_num) {
-                    case 0: solid.loadSolid("../data/platonic/tetrahedron.txt"); break;
-                    case 1: solid.loadSolid("../data/platonic/cube.txt"); break;
-                    case 2: solid.loadSolid("../data/platonic/octahedron.txt"); break;
-                    case 3: solid.loadSolid("../data/platonic/dodecahedron.txt"); break;
-                    case 4: solid.loadSolid("../data/platonic/icosahedron.txt"); break;
-                    case 5: solid.loadSolid("../data/pathological/cubes_corner.txt"); break;
-                    case 6: solid.loadSolid("../data/pathological/tetrahedron_edge.txt"); break;
-                    case 7: solid.loadSolid("../data/pathological/hollow_cube.txt"); break;
-                    case 8: solid.loadSolid("../data/pathological/stacked_cube.txt"); break;
-                }
+                solid_num = (solid_num + 1) % num_shapes;
+                solid.loadSolid("../data/" + shapes[solid_num] + ".txt");
             }
         }
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
